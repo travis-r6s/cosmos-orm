@@ -1,0 +1,25 @@
+{
+	"name": "cosmos-orm",
+	"version": "1.0.0",
+	"description": "a simple ORM for Cosmos DB",
+	"main": "./dist/index.mjs",
+	"scripts": {
+		"build": "tsup --dts",
+		"dev": "tsup --watch",
+		"lint": "biome check --apply ."
+	},
+	"exports": {
+		".": {
+			"require": "./dist/index.cjs",
+			"import": "./dist/index.mjs",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"keywords": ["cosmos", "orm"],
+	"author": "Travis Reynolds <travis@travisreynolds.dev>",
+	"devDependencies": {
+		"@biomejs/biome": "1.6.0",
+		"tsup": "^8.0.2",
+		"typescript": "^5.4.2"
+	}
+}
