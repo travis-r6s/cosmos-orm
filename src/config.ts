@@ -1,7 +1,7 @@
 import { CosmosClient } from '@azure/cosmos'
 import { type Base, BaseModel } from './base-model'
 
-export interface Builder {
+interface Builder {
   createModel: <T extends Base>(container: string) => BaseModel<T>
 }
 
@@ -15,9 +15,8 @@ export interface Options<M extends { [K: string]: BaseModel }> {
   models: (builder: Builder) => M
 }
 
-export interface DB<M extends Record<string, BaseModel>, O extends Options<M>> {
+export type DB<M extends Record<string, BaseModel>, O extends Options<M>> = ReturnType<O['models']> & {
   client: CosmosClient
-  models: ReturnType<O['models']>
 }
 
 export function createClient<M extends Record<string, BaseModel>>(options: Options<M>): DB<M, Options<M>> {
@@ -36,6 +35,6 @@ export function createClient<M extends Record<string, BaseModel>>(options: Optio
 
   return {
     client,
-    models,
+    ...models,
   }
 }
