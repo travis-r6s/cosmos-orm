@@ -1,1 +1,1 @@
-console.log("test!");
+export { BaseModel } from './base-model'
