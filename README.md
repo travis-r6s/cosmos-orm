@@ -21,7 +21,7 @@ Then, instantiate the client for a database:
 ```ts
 import { createClient } from 'cosmos-orm'
 
-// A sample type - you may define this here, or import it from another file or from an OpenAPI definition from [`openapi-typescript`](https://npm.im/openapi-typescript) perhaps
+// A sample type - you may define this here, or import it from another file or from an OpenAPI definition from `openapi-typescript` perhaps
 interface Post {
   title: string
   author: string
@@ -29,21 +29,20 @@ interface Post {
 }
 
 const orm = createClient({
-  // Optional, defaults to `COSMOS_CONNECTION_STRING`
+  // Optional, defaults to `COSMOS_CONNECTION_STRING` - this is the name of the env that holds your Cosmos DB connection string.
   connectionStringSetting: 'COSMOS_CONNECTION_STRING',
   // Required, the name of the Cosmos database you want to create a client for
   database: 'my-db',
-  // Optional, but kind of the whole point: create a map of containers:models
+  // Optional, but kind of the whole point: create a map of containers -> models
   // (t) is a helper function to create a model for a container
   models: t => ({
-    // The createModel function accepts a generic, so you can get typed methods
+    // The createModel function accepts a generic, so you can get typed methods + returned data
     user: t.createModel<{ name: string, email: string }>('users'),
     post: t.createModel<Post>('posts')
   })
 })
 
 // Now you can use the models:
-
 
 const user = await orm.user.find('abc123') // { id: string, name: string, email: string }
 
@@ -61,20 +60,19 @@ const usersPosts = await orm.post.query({
 
 ### Azure Functions
 
-If you are using this within an Azure Function App, there are some handy helper functions you can use to create input bindings for your functions:
+If you are using this within an Azure Function App, there are some handy helper functions you can use to create input bindings for your handlers:
 
 ```ts
 // Import your ORM from wherever you created it
 import orm from '../utils/orm'
 
-// This will create an input binding that fetches a user that has an ID matching the input context variable `Query.id` - see below code example for explanation.
+// This will create an input binding that fetches a user that has an ID matching the input context variable `Query.id` - see below this code example for explanation.
 const userInputBinding = orm.user.createFindBinding('Query.id')
 
 // This will create an input binding that fetches all items from a container
 const postsInputBinding = orm.post.createAllBinding()
 
-
-// Create your handler, and use context.extraInputs to fetch
+// Create your handler, and use context.extraInputs to fetch input documents
 export async function handler(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const user = context.extraInputs.get(userInputBinding)
   const posts = context.extraInputs.get(postsInputBinding)
@@ -90,8 +88,9 @@ app.http('User', {
   route: 'user',
   methods: ['GET'],
   authLevel: 'anonymous',
+  // Make sure to add the input bindings here
   extraInputs: [userInputBinding, postsInputBinding],
 })
 ```
 
-Checkout the documentation to learn more about input bindings and see some examples [here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-cosmosdb-v2-input?pivots=programming-language-typescript&tabs=python-v2%2Cisolated-process%2Cnodejs-v4%2Cextensionv4) and [here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-expressions-patterns).
+Checkout the documentation to learn more about input bindings and see some examples [here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-cosmosdb-v2-input?pivots=programming-language-typescript&tabs=python-v2%2Cisolated-process%2Cnodejs-v4%2Cextensionv4), and [here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-expressions-patterns).
