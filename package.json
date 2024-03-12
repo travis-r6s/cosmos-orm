@@ -2,31 +2,45 @@
   "name": "cosmos-orm",
   "version": "1.0.0",
   "description": "a simple ORM for Cosmos DB",
-  "main": "./dist/index.mjs",
   "scripts": {
     "build": "tsup --dts",
     "dev": "tsup --watch",
-    "lint": "biome check --apply ."
+    "lint": "biome check --apply .",
+    "prepack": "pnpm run build"
   },
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": {
+        "types": "dist/index.d.mts",
+        "default": "dist/index.mjs"
+      },
+      "require": {
+        "types": "dist/index.d.ts",
+        "default": "dist/index.js"
+      }
     }
   },
+  "files": ["dist/**/*"],
   "keywords": ["cosmos", "orm"],
   "author": "Travis Reynolds <travis@travisreynolds.dev>",
+  "dependencies": {
+    "@azure/cosmos": "^4.0.0",
+    "@azure/functions": "^4.3.0",
+    "ulidx": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@azure/cosmos": "^4.0.0",
+    "@azure/functions": "^4.3.0",
+    "ulidx": "^2.3.0"
+  },
   "devDependencies": {
     "@biomejs/biome": "1.6.0",
     "@types/node": "^20.11.26",
     "tsup": "^8.0.2",
     "tsx": "^4.7.1",
     "typescript": "^5.4.2"
-  },
-  "dependencies": {
-    "@azure/cosmos": "^4.0.0",
-    "@azure/functions": "^4.3.0",
-    "ulidx": "^2.3.0"
   }
 }

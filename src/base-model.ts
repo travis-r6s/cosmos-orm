@@ -1,23 +1,24 @@
 import type { Container, ItemDefinition, Resource } from '@azure/cosmos'
-import { CosmosClient, type SqlQuerySpec } from '@azure/cosmos'
+import type { CosmosClient, SqlQuerySpec } from '@azure/cosmos'
 import { input } from '@azure/functions'
 import { ulid } from 'ulidx'
 
-// TODO: Make sure this always returns the correct type
-interface Base extends Record<string, unknown> {}
+export interface Base extends Record<string, unknown> {}
+// TODO: Make sure these always returns the correct type
 type CosmosResource<T extends Base> = Resource & T
 type CosmosItemDefinition<T extends Base> = ItemDefinition & T
 
-interface Options {
+export interface Options {
   /** The name of the Cosmos database */
   database: string
   /** The name of the Cosmos container within the database */
   container: string
+  /** The instantiated Cosmos client */
+  client: CosmosClient
   /** The name of the env of the Cosmos connection string - defaults to `COSMOS_CONNECTION_STRING` */
   connectionStringSetting?: string
 }
 
-// TODO: We could add methods to this base, like Lucid does?
 const initial = {}
 
 export class BaseModel<T extends Base = typeof initial> {
@@ -26,8 +27,6 @@ export class BaseModel<T extends Base = typeof initial> {
   connectionStringSetting = 'COSMOS_CONNECTION_STRING'
 
   constructor(private options: Options) {
-    // TODO: This might as well be in a parent, so we have a main client we pass down?
-    // Although each instance of this will be different, so perhaps merge parent defaults?
     if (options.connectionStringSetting) {
       this.connectionStringSetting = options.connectionStringSetting
     }
@@ -37,8 +36,7 @@ export class BaseModel<T extends Base = typeof initial> {
       throw new Error(`Missing an env with the name ${this.connectionStringSetting}`)
     }
 
-    const cosmos = new CosmosClient(connectionString)
-    this.client = cosmos.database(options.database).container(options.database)
+    this.client = options.client.database(options.database).container(options.container)
   }
 
   /**
@@ -69,9 +67,6 @@ export class BaseModel<T extends Base = typeof initial> {
     const { resources } = await this.client.items.readAll().fetchAll()
     return resources as CosmosItemDefinition<T>[]
   }
-
-  // TODO: So I basically want to return another model instantiated with
-  // the fetched data then I can call a computed which has access to the user result?
 
   /** Find a specific resource by its ID */
   public async find(id: string): Promise<CosmosResource<T> | undefined> {
