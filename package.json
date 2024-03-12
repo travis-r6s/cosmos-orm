@@ -9,22 +9,22 @@
     "lint": "biome check --apply .",
     "prepack": "pnpm run build"
   },
-  "main": "dist/index.mjs",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": {
-        "types": "dist/index.d.mts",
-        "default": "dist/index.mjs"
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
       },
       "require": {
-        "types": "dist/index.d.ts",
-        "default": "dist/index.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     }
   },
-  "files": ["dist/**/*"],
+  "files": ["./dist/**/*"],
   "keywords": ["cosmos", "orm"],
   "author": "Travis Reynolds <travis@travisreynolds.dev>",
   "homepage": "https://github.com/wind-apps/cosmos-orm#readme",
