@@ -130,13 +130,12 @@ export class BaseModel<T extends Base = typeof initial> {
   }
 
   /** Create a resource */
-  public async create(input: T): Promise<CosmosResource<T> | undefined> {
-    // TODO: Choose whether we should add these fields?
+  public async create(input: Omit<T, 'id' | 'createdAt' | 'updatedAt'> & Partial<{ id: string, createdAt: string, updatedAt: string }>): Promise<CosmosResource<T> | undefined> {
     const merged = {
-      id: this.fields.id ? ulid() : undefined,
-      createdAt: this.fields.timestamp ? new Date().toISOString() : undefined,
-      updatedAt: this.fields.timestamp ? new Date().toISOString() : undefined,
       ...input,
+      id: this.fields.id ? ulid() : input.id,
+      createdAt: this.fields.timestamp ? new Date().toISOString() : input.createdAt,
+      updatedAt: this.fields.timestamp ? new Date().toISOString() : input.updatedAt,
     }
 
     const { resource } = await this.client.items.create(merged)
@@ -150,10 +149,10 @@ export class BaseModel<T extends Base = typeof initial> {
   }
 
   /** Update a resource - replaces the whole resource, so make sure to provide a full input */
-  public async replace(id: string, input: Omit<T, 'id' | 'updatedAt'>): Promise<CosmosResource<T> | undefined> {
+  public async replace(id: string, input: Omit<T, 'updatedAt'> & Partial<{ updatedAt: string }>): Promise<CosmosResource<T> | undefined> {
     const merged = {
-      updatedAt: this.fields.timestamp ? new Date().toISOString() : undefined,
       ...input,
+      updatedAt: this.fields.timestamp ? new Date().toISOString() : input.updatedAt,
     }
 
     const { resource } = await this.client.item(id, id).replace(merged)
