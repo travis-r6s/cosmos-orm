@@ -38,7 +38,11 @@ const orm = createClient({
   models: t => ({
     // The createModel function accepts a generic, so you can get typed methods + returned data
     user: t.createModel<{ name: string, email: string }>('users'),
-    post: t.createModel<Post>('posts')
+    post: t.createModel<Post>('posts', {
+      // By default, the ORM automatically generates an ID for the document on creation,
+      // and also adds createdAt and updatedAt timestamps - you can disable these if needed.
+      fields: { id: true, timestamp: false }
+    })
   })
 })
 

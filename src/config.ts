@@ -1,8 +1,9 @@
 import { CosmosClient } from '@azure/cosmos'
 import { type Base, BaseModel } from './base-model'
+import type { ModelOptions } from './base-model'
 
 interface Builder {
-  createModel: <T extends Base>(container: string) => BaseModel<T>
+  createModel: <T extends Base>(container: string, options?: Pick<ModelOptions, 'fields'>) => BaseModel<T>
 }
 
 /** Default client configuration - for example the connection string setting, and the database name. */
@@ -27,10 +28,9 @@ export function createClient<M extends Record<string, BaseModel>>(options: Optio
   const client = new CosmosClient(connectionString)
 
   const builder: Builder = {
-    createModel: (container) => new BaseModel({ client, container, ...options }),
+    createModel: (container, config = {}) => new BaseModel({ client, container, ...options, ...config }),
   }
 
-  // This will return an object like { [key: string]: BaseModel<T> }
   const models = options.models(builder)
 
   return {
