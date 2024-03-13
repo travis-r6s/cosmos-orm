@@ -1,7 +1,7 @@
 {
   "name": "cosmos-orm",
   "version": "0.1.2",
-  "description": "a simple ORM for Cosmos DB",
+  "description": "A simple ORM for Cosmos DB",
   "license": "MIT",
   "scripts": {
     "build": "tsup --dts",
