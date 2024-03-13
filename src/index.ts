@@ -1,2 +1,2 @@
-export { BaseModel } from './base-model'
-export { createClient } from './config'
+export * from './base-model'
+export * from './config'
