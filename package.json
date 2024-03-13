@@ -1,6 +1,6 @@
 {
   "name": "cosmos-orm",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A simple ORM for Cosmos DB",
   "license": "MIT",
   "scripts": {
