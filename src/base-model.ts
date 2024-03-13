@@ -162,12 +162,12 @@ export class BaseModel<T extends Base = typeof initial> {
   /** Delete a resource */
   public async delete(id: string): Promise<CosmosResource<T> | undefined> {
     const { resource } = await this.client.item(id, id).delete<T>()
-    return resource
+    return resource as CosmosResource<T>
   }
 
   /** Run a query, and fetch all results */
   public async query(query: string | SqlQuerySpec): Promise<CosmosResource<T>[]> {
     const { resources } = await this.client.items.query(query).fetchAll()
-    return resources
+    return resources as CosmosResource<T>[]
   }
 }
