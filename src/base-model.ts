@@ -53,7 +53,7 @@ export class BaseModel<T extends Base = typeof initial> {
       this.fields = {
         ...this.fields,
         // Don't know why this won't remove the bool type
-        ...(this.options.fields as AutoFields)
+        ...(this.options.fields as AutoFields),
       }
     }
 
@@ -129,8 +129,27 @@ export class BaseModel<T extends Base = typeof initial> {
     return resource as CosmosResource<T> | undefined
   }
 
+  /** Find multiple resources by a specific key */
+  public async findManyBy(key: keyof T, value: string): Promise<CosmosResource<T>[]> {
+    const { resources } = await this.client.items
+      .query({
+        query: 'SELECT * FROM C WHERE C[@key] = @value',
+        parameters: [
+          { name: '@key', value: String(key) },
+          { name: '@value', value: value },
+        ],
+      })
+      .fetchAll()
+
+    const [resource] = resources
+
+    return resource as CosmosResource<T>[]
+  }
+
   /** Create a resource */
-  public async create(input: Omit<T, 'id' | 'createdAt' | 'updatedAt'> & Partial<{ id: string, createdAt: string, updatedAt: string }>): Promise<CosmosResource<T> | undefined> {
+  public async create(
+    input: Omit<T, 'id' | 'createdAt' | 'updatedAt'> & Partial<{ id: string; createdAt: string; updatedAt: string }>,
+  ): Promise<CosmosResource<T> | undefined> {
     const merged = {
       ...input,
       id: this.fields.id ? ulid() : input.id,
@@ -149,7 +168,10 @@ export class BaseModel<T extends Base = typeof initial> {
   }
 
   /** Update a resource - replaces the whole resource, so make sure to provide a full input */
-  public async replace(id: string, input: Omit<T, 'updatedAt'> & Partial<{ updatedAt: string }>): Promise<CosmosResource<T> | undefined> {
+  public async replace(
+    id: string,
+    input: Omit<T, 'updatedAt'> & Partial<{ updatedAt: string }>,
+  ): Promise<CosmosResource<T> | undefined> {
     const merged = {
       ...input,
       updatedAt: this.fields.timestamp ? new Date().toISOString() : input.updatedAt,
