@@ -16,11 +16,11 @@ export interface Options<M extends { [K: string]: BaseModel }> {
   models: (builder: Builder) => M
 }
 
-export type DB<M extends Record<string, BaseModel>, O extends Options<M>> = ReturnType<O['models']> & {
+export type DB<M extends Record<string, BaseModel>> = ReturnType<Options<M>['models']> & {
   client: CosmosClient
 }
 
-export function createClient<M extends Record<string, BaseModel>>(options: Options<M>): DB<M, Options<M>> {
+export function createClient<M extends Record<string, BaseModel>>(options: Options<M>): DB<M> {
   const connectionStringSetting = options.connectionStringSetting || 'COSMOS_CONNECTION_STRING'
   const connectionString = process.env[connectionStringSetting]
   if (typeof connectionString !== 'string') throw new Error(`Missing env for ${connectionStringSetting}`)
@@ -38,3 +38,4 @@ export function createClient<M extends Record<string, BaseModel>>(options: Optio
     ...models,
   }
 }
+
