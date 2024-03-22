@@ -88,6 +88,16 @@ export class BaseModel<T extends Base = typeof initial> {
     })
   }
 
+  /** Create an Azure Function app input binding with a custom SQL query. */
+  public createSQLBinding(sqlQuery: string) {
+    return input.cosmosDB({
+      databaseName: this.options.database,
+      containerName: this.options.container,
+      connection: this.connectionStringSetting,
+      sqlQuery
+    })
+  }
+
   /** Fetch all resources in a container */
   public async all(): Promise<CosmosItemDefinition<T>[]> {
     const { resources } = await this.client.items.readAll().fetchAll()
