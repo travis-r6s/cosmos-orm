@@ -39,19 +39,19 @@
   },
   "dependencies": {
     "@azure/cosmos": "^4.0.0",
-    "@azure/functions": "^4.3.0",
+    "@azure/functions": "^4.5.0",
     "ulidx": "^2.3.0"
   },
   "peerDependencies": {
     "@azure/cosmos": "^4.0.0",
-    "@azure/functions": "^4.3.0",
+    "@azure/functions": "^4.5.0",
     "ulidx": "^2.3.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.6.0",
-    "@types/node": "^20.11.26",
+    "@biomejs/biome": "1.7.3",
+    "@types/node": "^20.12.12",
     "tsup": "^8.0.2",
-    "tsx": "^4.7.1",
-    "typescript": "^5.4.2"
+    "tsx": "^4.10.4",
+    "typescript": "^5.4.5"
   }
 }
