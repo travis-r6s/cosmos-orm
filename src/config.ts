@@ -38,4 +38,3 @@ export function createClient<M extends Record<string, BaseModel>>(options: Optio
     ...models,
   }
 }
-
