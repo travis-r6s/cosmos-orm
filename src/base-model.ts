@@ -1,4 +1,4 @@
-import type { Container, ItemDefinition, Resource } from '@azure/cosmos'
+import type { Container, FeedOptions, ItemDefinition, Resource } from '@azure/cosmos'
 import type { CosmosClient, SqlQuerySpec } from '@azure/cosmos'
 import { input } from '@azure/functions'
 import { ulid } from 'ulidx'
@@ -94,7 +94,7 @@ export class BaseModel<T extends Base = typeof initial> {
       databaseName: this.options.database,
       containerName: this.options.container,
       connection: this.connectionStringSetting,
-      sqlQuery
+      sqlQuery,
     })
   }
 
@@ -197,9 +197,23 @@ export class BaseModel<T extends Base = typeof initial> {
     return resource as CosmosResource<T>
   }
 
-  /** Run a query, and fetch all results */
-  public async query(query: string | SqlQuerySpec): Promise<CosmosResource<T>[]> {
-    const { resources } = await this.client.items.query(query).fetchAll()
-    return resources as CosmosResource<T>[]
+  /**
+   * Run a query, and fetch all results
+   *
+   * This function accepts a generic, so you can pass in the type of the response if
+   * you are running a custom select query - for example:
+   *
+   * `.query<{ id: string }>('SELECT c.id FROM c') // returns { id: string }[]`
+   *
+   * `.query<number>('SELECT VALUE count(c.id) FROM c') // returns [number]`
+   *
+   * This is just a wrapper of the `.client.items.query()` function, so you can use that
+   * instead if you need access to the request metrics for example.
+   */
+
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  public async query<R = any>(query: string | SqlQuerySpec, options?: Pick<FeedOptions, 'maxItemCount'>): Promise<R[]> {
+    const { resources } = await this.client.items.query(query, options).fetchAll()
+    return resources as R[]
   }
 }
