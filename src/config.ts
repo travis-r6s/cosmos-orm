@@ -34,7 +34,7 @@ export type DB<M extends Record<string, BaseModel>> = ReturnType<Options<M>['mod
 export function createClient<M extends Record<string, BaseModel>>(options: Options<M>): DB<M> {
   const connectionStringSetting = options.connectionStringSetting || 'COSMOS_CONNECTION_STRING'
   const connectionString = options.connectionString ?? process.env[connectionStringSetting]
-  console.log({ options })
+
   if (typeof connectionString !== 'string') {
     if (options.connectionString) throw new Error('Missing connection string value (from `options.connectionString`)')
     throw new Error(`Missing connection string for ${connectionStringSetting}`)
