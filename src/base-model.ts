@@ -57,11 +57,6 @@ export class BaseModel<T extends Base = typeof initial> {
       }
     }
 
-    const connectionString = process.env[this.connectionStringSetting]
-    if (typeof connectionString !== 'string') {
-      throw new Error(`Missing an env with the name ${this.connectionStringSetting}`)
-    }
-
     this.client = options.client.database(options.database).container(options.container)
   }
 
