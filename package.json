@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsup --dts",
     "dev": "tsup --watch",
-    "lint": "biome check --apply .",
+    "lint": "biome check --write .",
     "prepack": "pnpm run build"
   },
   "main": "./dist/index.mjs",
@@ -24,13 +24,8 @@
       }
     }
   },
-  "files": [
-    "./dist/**/*"
-  ],
-  "keywords": [
-    "cosmos",
-    "orm"
-  ],
+  "files": ["./dist/**/*"],
+  "keywords": ["cosmos", "orm"],
   "author": "Travis Reynolds <travis@travisreynolds.dev>",
   "homepage": "https://github.com/wind-apps/cosmos-orm#readme",
   "repository": {
@@ -48,10 +43,10 @@
     "ulidx": "^2.3.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.7.3",
-    "@types/node": "^20.12.12",
-    "tsup": "^8.0.2",
-    "tsx": "^4.10.4",
+    "@biomejs/biome": "1.8.1",
+    "@types/node": "^20.14.2",
+    "tsup": "^8.1.0",
+    "tsx": "^4.15.2",
     "typescript": "^5.4.5"
   }
 }
