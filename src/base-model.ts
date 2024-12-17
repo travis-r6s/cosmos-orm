@@ -82,7 +82,7 @@ export class BaseModel<T extends Base = typeof initial> {
    * const shopDocument2 = orm.shops.createFindBinding<ActivityInput>('id') // ❌
    * ```
    */
-  public createFindBinding<Input extends Record<string, unknown> = Record<string, unknown>, Key = keyof Input & string>(
+  public createFindBinding<Input extends object = object, Key = keyof Input & string>(
     variable: Key,
   ) {
     const defaultVariable = 'id'
