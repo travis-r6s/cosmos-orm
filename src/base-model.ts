@@ -64,8 +64,7 @@ export class BaseModel<T extends Base = typeof initial> {
    * Create an Azure Function app input binding to find a specific document by an input variable.
    * You can also provide a type (matching `Record<string, any>`) as the first type generic,
    * and it will validate the variable to be one of the types keys.
-   * @default id
-   * @returns `{id}`
+   *
    * @example
    * ```ts
    * const shopInput = orm.shops.createFindBinding(`shop`)
@@ -82,11 +81,8 @@ export class BaseModel<T extends Base = typeof initial> {
    * const shopDocument2 = orm.shops.createFindBinding<ActivityInput>('id') // ❌
    * ```
    */
-  public createFindBinding<Input extends object = object, Key = keyof Input & string>(
-    variable: Key,
-  ) {
-    const defaultVariable = 'id'
-    const binding = `{${variable ?? defaultVariable}}`
+  public createFindBinding<Input extends object = object, Key = keyof Input & string>(variable: Key) {
+    const binding = `{${variable}}`
 
     return input.cosmosDB({
       databaseName: this.options.database,
