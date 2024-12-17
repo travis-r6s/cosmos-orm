@@ -85,12 +85,15 @@ export class BaseModel<T extends Base = typeof initial> {
   public createFindBinding<Input extends Record<string, unknown> = Record<string, unknown>, Key = keyof Input & string>(
     variable: Key,
   ) {
+    const defaultVariable = 'id'
+    const binding = `{${variable ?? defaultVariable}}`
+
     return input.cosmosDB({
       databaseName: this.options.database,
       containerName: this.options.container,
       connection: this.connectionStringSetting,
-      id: `{${variable}}`,
-      partitionKey: `{${variable}}`,
+      id: binding,
+      partitionKey: binding,
     })
   }
 
