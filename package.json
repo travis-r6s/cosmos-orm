@@ -1,6 +1,6 @@
 {
   "name": "cosmos-orm",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A simple ORM for Cosmos DB",
   "license": "MIT",
   "scripts": {
@@ -24,8 +24,13 @@
       }
     }
   },
-  "files": ["./dist/**/*"],
-  "keywords": ["cosmos", "orm"],
+  "files": [
+    "./dist/**/*"
+  ],
+  "keywords": [
+    "cosmos",
+    "orm"
+  ],
   "author": "Travis Reynolds <travis@travisreynolds.dev>",
   "homepage": "https://github.com/wind-apps/cosmos-orm#readme",
   "repository": {
