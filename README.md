@@ -4,6 +4,20 @@
 
 This is a simple Typescript ORM for [Azure Cosmos DB](https://azure.microsoft.com/products/cosmos-db), Microsoft's NoSQL database. It provides some helper functions to create a client for a Cosmos database, and creating ORM models for each container within that database. The methods within the base ORM model loosely follow the [Lucid ORM](https://lucid.adonisjs.com), some of which are `.all()`, `.find(id)`, `.findMany([id])`.
 
+### Requirements
+
+You must be using the Functions extension bundle version range of: `[4.0.0, 5.0.0)`
+
+`host.json`
+```json
+{
+  "extensionBundle": {
+    "id": "Microsoft.Azure.Functions.ExtensionBundle",
+    "version": "[4.0.0, 5.0.0)"
+  }
+}
+```
+
 ### Setup
 
 Install this package:
